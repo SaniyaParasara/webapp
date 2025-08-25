@@ -1,38 +1,43 @@
 pipeline {
     agent any
 
-    stages{
-        stage('checkout') {
-            steps{
+    stages {
+        stage('Checkout') {
+            steps {
                 git branch: 'main',
-                credentialsId: 'your_git_credentials',
-                url: ''
+                    credentialsId: 'your_git_credentials',
+                    url: 'https://github.com/SaniyaParasara/webapp.git'
             }
         }
 
-        stage('build') {
+        stage('Build') {
             steps {
-                echo'building the application...'
+                echo 'Building the application...'
+                
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+            
             }
         }
 
-        stage('test') {
-            steps {
-                echo'Runnig tests...'
-            }
-        }
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
+                // Example: run container
+                
             }
         }
     }
-post {
-    success{
-        echo 'Pipeline completed successfully!'
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs.'
+        }
     }
-    failure {
-        echo 'Pipeline failed. check logs.'
-    }
-}
 }
