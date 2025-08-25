@@ -1,38 +1,40 @@
 pipeline {
-    agent any
+  agent any
 
-    stages{
-        stage('checkout') {
-            steps{
-                git branch: 'main',
-                credentialsId: 'your_git_credentials',
-                url: ''
-            }
-        }
+  stages {
+    stage('Checkout') {
+      steps {
+        // EITHER use the job SCM:
+        checkout scm
+        // OR comment the above and use explicit git:
+        // git branch: 'main', url: 'https://github.com/SaniyaParasara/webapp.git'
+      }
+    }
 
-        stage('build') {
-            steps {
-                echo'building the application...'
-            }
-        }
+    stage('Build') {
+      steps {
+        echo 'Building the application...'
+        // sh 'docker build -t webapp:latest .'
+      }
+    }
 
-        stage('test') {
-            steps {
-                echo'Runnig tests...'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
-            }
-        }
+    stage('Test') {
+      steps {
+        echo 'Running tests...'
+        // sh 'docker run --rm webapp:latest npm test'
+      }
     }
-post {
-    success{
-        echo 'Pipeline completed successfully!'
+
+    stage('Deploy') {
+      steps {
+        echo 'Deploying application...'
+        // sh 'docker run -d -p 3000:3000 --name webapp webapp:latest'
+      }
     }
-    failure {
-        echo 'Pipeline failed. check logs.'
-    }
-}
+  }
+
+  post {
+    success { echo 'Pipeline completed successfully!' }
+    failure { echo 'Pipeline failed. check logs.' }
+  }
 }
